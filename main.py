@@ -1,12 +1,32 @@
+import discord
+from discord.ext import commands
+import random
 
-meme_dict = {
-            "CRINGE": "Algo excepcionalmente raro o embarazoso",
-            "LOL": "Una respuesta común a algo gracioso",
-            }
-word = input("Escribe una palabra que no entiendas (¡con mayúsculas!): ")
-if word in meme_dict.keys():
-    print(meme_dict[word])
-    # ¿Qué debemos hacer si se encuentra la palabra?
-else:
-    # ¿Qué hacer si no se encuentra la palabra?
-    print("Perdoname no tengo la Palabra que buscas :(")
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='&', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Hola, soy un bot {bot.user}!')
+
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
+
+@bot.command(description='For when you wanna settle the score some other way')
+async def choose(ctx, *choices: str):
+    """Chooses between multiple choices."""
+    await ctx.send(random.choice(choices))
+
+bot.run()
